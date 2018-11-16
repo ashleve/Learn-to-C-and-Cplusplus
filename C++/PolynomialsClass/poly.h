@@ -42,14 +42,14 @@ public:
 	friend poly operator* (const poly &p1, const poly &p2)
 	{
 		poly tmp;
-        for(unsigned int i=0; i<p1.v.size(); i++)
-        {
-		    for(unsigned int j=0; j<p2.v.size(); j++)
-            {
-                tmp[i+j] += p1.v[i]*p2.v[j];
-            }
-	    }
-
+        	for(unsigned int i=0; i<p1.v.size(); i++)
+        	{
+			for(unsigned int j=0; j<p2.v.size(); j++)
+            		{
+                		tmp[i+j] += p1.v[i]*p2.v[j];
+            		}
+		}
+		
 		return tmp;
 	}
 	
@@ -64,13 +64,13 @@ public:
 
 	friend ostream & operator << (ostream & s, poly p)
   	{
-			int i = p.v.size()-1;
+		int i = p.v.size()-1;
     		while(i!=0)
     		{
     			s<<p[i]<<"*(x^"<<i<<") + ";
-				i--;
+			i--;
     		}
-			s<<p[i]<<"*(x^"<<i<<")";
+		s<<p[i]<<"*(x^"<<i<<")";
 
     		return s;
  	 }
