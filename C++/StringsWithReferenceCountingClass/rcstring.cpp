@@ -24,12 +24,18 @@ int main()
 
 /////////////////////////////////////////////////////////////
 
-	rcstring g = "AZZahjgSSTkc";
-	cout << g.toLower() << endl;
-	cout << g.Left(4) << endl;
+	rcstring g = "FNEGOsk24";
+	rcstring z = g;
+	cout << g.show() << endl;
 
-	rcstring n = "3292";
-	cout << n.atoi() << endl << endl;
+	g.toLower();
+	cout << z.Left(4) << endl;
+
+	cout << z.show() << endl;
+	cout << g.show() << endl;
+
+	/*rcstring n = "3292";
+	cout << n.atoi() << endl << endl;*/
 	
 /////////////////////////////////////////////////////////////
 

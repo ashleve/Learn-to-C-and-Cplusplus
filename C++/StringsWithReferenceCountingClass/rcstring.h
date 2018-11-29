@@ -1,23 +1,25 @@
 #ifndef __RCSTRING_H__
 #define __RCSTRING_H__
+
 #include <string.h>
 #include <stdio.h>
 #include <malloc.h>
 #include <iostream>
+
 using namespace std;
+
 
 class rcstring {
 	struct rctext;
 	rctext* data;
 public:
+
 	class Range {};
 	class Cref;
 	rcstring();
 	rcstring(const char*);
 	rcstring(const rcstring&);
 	~rcstring();
-
-
 
 	rcstring& operator=(const char*);
 	rcstring& operator=(const rcstring&);
@@ -31,8 +33,10 @@ public:
 	Cref operator[](unsigned int i);
 
 	int atoi();
-	rcstring& toLower();
 	rcstring Left(int n);
+	rcstring& toLower();
+
+	int show();
 };
 
 
@@ -65,7 +69,7 @@ struct rcstring::rctext
 		return t;
 	};
 
-	void assign(unsigned int nsize, const char *p)
+	void assign(unsigned int nsize, const char *p)	//uzywane tylko dla n=1
 	{
 		if (size != nsize)
 		{
@@ -79,17 +83,16 @@ struct rcstring::rctext
 			strncpy(s, p, size);
 		s[size] = '\0';
 	}
-
 private:
-	rctext(const rctext&);
-	rctext& operator=(const rctext&);
+	rctext(const rctext&);	//rctext a(b)
+	rctext& operator=(const rctext&);	//rctext a = b
 };
 
 
 class rcstring::Cref
 {
 	friend class rcstring;
-	rcstring& s;
+	rcstring& s;	//dziala dla const
 	int i;
 	Cref (rcstring& ss, unsigned int ii): s(ss), i(ii) {};
 
@@ -192,7 +195,7 @@ inline void rcstring::write(unsigned int i, char c)
 	data->s[i] = c;
 }
 
-char rcstring::operator[](unsigned int i) const
+char rcstring::operator[](unsigned int i) const // dla zmiennej klasy typu const
 {
 	cout << "char rcstring::operator[](unsigned int i) const" << endl;
 	check(i);
@@ -210,60 +213,48 @@ rcstring::Cref rcstring::operator[](unsigned int i)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+int rcstring::show()
+{
+	return data->n;
+}
+
+
 int rcstring::atoi()
 {
-	int n = 0;
-	int multiplier = 1;
 
-	for (int i = data->size - 1; i >= 0; i--)
-	{
-		n += (*(data->s + i) - 48) * multiplier;
-		multiplier *= 10;
-	}
+	return std::atoi(data->s);
 
-	return n;
 }
 
-rcstring& rcstring::toLower()
-{
-	rcstring* res = (rcstring*)malloc(sizeof(rcstring));
-	//rcstring* res = new rcstring;	//zamiast alokacji^ mozna to (new nie tylko alokuje ale tez wywoluje konstruktor ktory tu jest zbedny)
-	res->data = new rctext(data->size, data->s);
-
-//alternatywa
-	/*
-		rcstring* res = new rcstring;
-		res->data.assign(data->size, data->s);	sprawdz czy dziala
-	*/
-
-	char *c = res->data->s;
-	for (int i = 0; i < data->size; i++) //new rctext() samo wstawilo nulla wiec nie trzeba tu robic i <= data->size
-	{
-		if (*(c + i) >= 65 && *(c + i) <= 90)
-			*(c + i) += 32;
-	}
-
-	return *res;
-}
 
 rcstring rcstring::Left(int n) // ekstrakcja n znaków od lewej.
 {
-	if (n > data->size)return NULL;
+	check(n);
 
 	rcstring* res = (rcstring*)malloc(sizeof(rcstring));
-	res->data = new rctext(n, data->s + data->size - n);
+	res->data = new rctext(n, data->s);
 
-	/*
-	for (int i = data->size - n, j = 0; i < data->size; i++, j++)
-	{
-		*(res->data->s + j) = *(data->s + i);
-		//*(res->data->s + j) = Cref(*this, i);	//alternatywa
-	}
-	*/
-	//new rctext() samo wstawilo nulla wiec nie trzeba go dodawac
+	strncpy(res->data->s, data->s, n);
 
 	return *res;
 }
+
+
+rcstring& rcstring::toLower()
+{
+	for (int i = 0; i < data->size; i++)
+	{
+		if (this->operator[](i) >= 'A' && this->operator[](i) <= 'Z')
+		{
+			this->operator[](i) = this->data->s[i] + 32;
+		}
+	}
+
+	return *this;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 #endif /* __RCSTRING_H__ */
