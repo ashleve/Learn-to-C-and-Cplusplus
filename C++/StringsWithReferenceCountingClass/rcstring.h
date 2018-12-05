@@ -2,6 +2,7 @@
 #define __RCSTRING_H__
 
 #include <string.h>
+#include <cstdlib>
 #include <stdio.h>
 #include <malloc.h>
 #include <iostream>
@@ -84,15 +85,15 @@ struct rcstring::rctext
 		s[size] = '\0';
 	}
 private:
-	rctext(const rctext&);	//rctext a(b)
-	rctext& operator=(const rctext&);	//rctext a = b
+	rctext(const rctext&);	
+	rctext& operator=(const rctext&);
 };
 
 
 class rcstring::Cref
 {
 	friend class rcstring;
-	rcstring& s;	//dziala dla const
+	rcstring& s;
 	int i;
 	Cref (rcstring& ss, unsigned int ii): s(ss), i(ii) {};
 
@@ -195,7 +196,7 @@ inline void rcstring::write(unsigned int i, char c)
 	data->s[i] = c;
 }
 
-char rcstring::operator[](unsigned int i) const // dla zmiennej klasy typu const
+char rcstring::operator[](unsigned int i) const
 {
 	cout << "char rcstring::operator[](unsigned int i) const" << endl;
 	check(i);
@@ -221,28 +222,24 @@ int rcstring::show()
 
 int rcstring::atoi()
 {
-
 	return std::atoi(data->s);
-
 }
 
 
 rcstring rcstring::Left(int n) // ekstrakcja n znaków od lewej.
 {
 	check(n);
+    
+    rcstring res;
+    res.data->assign(n, data->s);
 
-	rcstring* res = (rcstring*)malloc(sizeof(rcstring));
-	res->data = new rctext(n, data->s);
-
-	strncpy(res->data->s, data->s, n);
-
-	return *res;
+	return res;
 }
 
 
 rcstring& rcstring::toLower()
 {
-	for (int i = 0; i < data->size; i++)
+	for (unsigned int i = 0; i < data->size; i++)
 	{
 		if (this->operator[](i) >= 'A' && this->operator[](i) <= 'Z')
 		{
