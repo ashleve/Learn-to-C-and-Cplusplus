@@ -22,7 +22,7 @@ public:
 
 	Book(string a = "", C c = Undefined, S s = NaPolce, unsigned int n = 0): Autor(a), Category(c), Status(s), NumberOfPages(n) {};
 
-	void show()
+	void show() const
 	{
 		cout << "Autor: " << Autor << endl;
 		cout << "Category: " << CategoryNames[Category] << endl;

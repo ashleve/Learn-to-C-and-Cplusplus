@@ -15,7 +15,7 @@ public:
 	Employee (string n = "", string j = "", unsigned int a = 0): Name(n), Position(j), Age(a) {};
 
 
-	void show()
+	void show() const
 	{
 		cout << "Name: " << this->Name << endl;
 		cout << "Position: " << this->Position << endl;

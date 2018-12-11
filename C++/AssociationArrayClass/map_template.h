@@ -10,18 +10,31 @@ template<typename aType, class E> class map_template {
 private:
 	vector<aType> ids;
 	vector<E> employees;
-	unsigned int size = 0;
+	unsigned int size;
 
 public:
-	void Add(aType id, E e)
+	map_template():size(0){};
+
+	void Add(const aType& id, const E& e)
 	{
+
 		ids.push_back(id);
-		employees.push_back(e);
+
+		try
+		{
+			employees.push_back(e);
+		}
+		catch (bad_alloc& ba)
+		{
+			ids.pop_back();
+			throw;
+		}
+
 		size++;
 	}
 
 
-	E* Find(const aType id)
+	E* Find(const aType& id)
 	{
 		for (unsigned int i = 0; i < size; i++)
 		{
@@ -32,7 +45,7 @@ public:
 	}
 
 
-	friend ostream & operator << (ostream & s, map_template& m)
+	friend ostream & operator << (ostream & s,const map_template& m)
 	{
 		cout << "------------------------------------" << endl;
 		for (unsigned int i = 0; i < m.size; i++)
